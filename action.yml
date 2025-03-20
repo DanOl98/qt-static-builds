@@ -7,20 +7,20 @@ runs:
       shell: bash
       run: |
         if [[ $(uname) == "Linux" ]]; then
-          os_name=linux
+          os_name=linux-latest
         elif [[ $(uname) == "Darwin" ]]; then
-          os_name=macos
+          os_name=macos-latest
         elif [[ $(uname) == "MINGW"* ]]; then
-          os_name=windows
+          os_name=windows-latest
         else
           echo "Unknown operating system"
           exit 1
         fi
         qt_version=${VERSION_TAG#*v}
         qt_version=${qt_version%-*}
-        curl -LO https://github.com/AllanChain/install-qt-static/releases/download/${VERSION_TAG}/qt-${qt_version}-static-${os_name}.zip
+        curl -LO https://github.com/DanOl98/qt-static-builds/releases/download/${VERSION_TAG}/qt-${qt_version}-static-${os_name}.zip
         7z x qt-*.zip
-        if [[ $os_name == "windows" ]]; then
+        if [[ $os_name == "windows-latest" ]]; then
           echo "$(pwd -W | sed 's,/,\\,g')\qt_static\bin" >> $GITHUB_PATH
         else
           echo "$(pwd)/qt_static/bin" >> $GITHUB_PATH
