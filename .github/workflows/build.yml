@@ -23,6 +23,7 @@ on:
         type: choice
         options:
           - "all"
+          - "6.11.0"
           - "6.10.2"
           - "6.9.3"
           - "6.8.3"
@@ -105,7 +106,7 @@ jobs:
           # Qt versions
           V_IN="${{ env.QT_VERSION_IN }}"
           if [ "$V_IN" = "all" ]; then
-            QT_LIST=('6.10.2' '6.9.3' '6.8.3' '6.7.3')
+            QT_LIST=('6.11.0' '6.10.2' '6.9.3' '6.8.3' '6.7.3')
           else
             QT_LIST=("$V_IN")
           fi
@@ -136,7 +137,7 @@ jobs:
         target: ${{ fromJSON(needs.setup.outputs.targets) }}
         qt: ${{ fromJSON(needs.setup.outputs.qt_versions) }}
     env:
-      COMMON_FLAGS: '-no-pch -no-feature-accessibility -feature-relocatable -nomake examples -nomake tools -nomake tests -gc-binaries -no-ltcg -sql-sqlite -skip qtwebengine -qt-libjpeg -qt-libpng -qt-zlib -qt-pcre'
+      COMMON_FLAGS: '-no-pch -no-feature-accessibility -feature-relocatable ${{ contains(fromJSON(''["6.11.0"]''), matrix.qt) && ''-skip tools'' || ''-nomake examples -nomake tools -nomake tests'' }} -gc-binaries -no-ltcg -sql-sqlite -skip qtwebengine -skip qtpdf -qt-libjpeg -qt-libpng -qt-zlib -qt-pcre'
       # NOTA: Su linux è necessario usare OBBLIGATORIAMENTE freetype di sistema (system-freetype),
       # altrimenti non è possibile utilizzare fontconfig e di conseguenza non si possono utilizzare font di sistema ma solo font embeddati nelle app.
       # Inoltre, harfbuzz deve essere anche lui a sistema altrimenti se importato su qt-harfbuzz forza qt-freetype
